@@ -1,0 +1,21 @@
+{
+  "name": "saja",
+  "version": "0.1.0",
+  "description": "CLI for Sassyjade",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Sassyjade",
+    "CLI",
+    "sass",
+    "jade",
+    "gulp"
+  ],
+  "author": "Philipp Nueesch <phil@rhinerock.com> (http://rhinerock.com)",
+  "license": "MIT",
+  "preferGlobal": true,
+  "bin": {
+    "saja": "index.js"
+  }
+}
