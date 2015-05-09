@@ -16,8 +16,11 @@ var userArgs = process.argv.splice(2);
 // pass the return from the check on userArgs
 var args = checkUserArgs(userArgs);
 
-// donwload the files and install everything
-downloadZip();
+// if checkUserArgs didn't return false
+if(args !== false) {
+  // donwload the files and install everything
+  downloadZip();
+}
 
 
 // Utilities
@@ -103,7 +106,7 @@ function checkUserArgs(userArgs) {
  */
 function downloadZip() {
   var url = "https://github.com/philister16/sassyjade/archive/master.zip";
-  var target = __dirname + "/master.zip";
+  var target = "master.zip";
   var cmd = "curl -L -o " + target + " " + url;
   console.log("Loading...");
   exec(cmd, function(err, stdout, stderr) {
@@ -123,7 +126,7 @@ function downloadZip() {
  * @callback rmZip()
  */
 function unZip() {
-  var target = __dirname + "/master.zip";
+  var target = "master.zip";
   var cmd = "unzip " + target;
   exec(cmd, function(err, stdout, stderr) {
     if(err) {
@@ -142,7 +145,7 @@ function unZip() {
  * @callback rename()
  */
 function rmZip() {
-  var target = __dirname + "/master.zip";
+  var target = "master.zip";
   var cmd = "rm " + target;
   exec(cmd, function(err, stdout, stderr) {
     if(err) {
@@ -162,8 +165,8 @@ function rmZip() {
  * @callback npmInstalls() || makeBlank()
  */
 function rename(args) {
-  var target = __dirname + "/sassyjade-master";
-  var cmd = "mv " + target + " " + __dirname + "/" + args.name;
+  var target = "./sassyjade-master";
+  var cmd = "mv " + target + " ./" + args.name;
   exec(cmd, function(err, stdout, stderr) {
     if(err) {
       throw err;
@@ -184,14 +187,14 @@ function rename(args) {
  * @return bool true if no err
  */
 function makeBlank(args) {
-  var target = __dirname + "/" + args.name;
+  var target = args.name;
   var cmd = "cd " + target + " && rm -r src";
   exec(cmd, function(err, stdout, stderr) {
     if(err) {
       throw err;
       return false;
     } else {
-      console.log("... and done! Your blank project is ready.")
+      console.log("... and done! Your blank project is ready. Please be aware that blank projects do NOT install any dependencies.");
       return true;
     }
   });
@@ -203,7 +206,7 @@ function makeBlank(args) {
  * @ return bool true if no err
  */
 function npmInstalls(args) {
-  var target = __dirname + "/" + args.name;
+  var target = args.name;
   var cmd = "cd " + target + " && npm install";
   exec(cmd, function(err, stdout, stderr) {
     if(err) {

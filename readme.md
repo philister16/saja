@@ -4,7 +4,7 @@ A super small CLI for Sassyjade
 ```
 $ saja <yourProject>
 ```
-This command will fetch the latest version of Sassyjade boilerplate and install all its dependencies in a new folder called "your Project", relative to the folder from where you ran the command.
+This command will fetch the latest version of [Sassyjade](http://rhinerock.com/sassyjade) boilerplate and install all its dependencies in a new folder called "your Project", relative to the folder from where you ran the command.
 ```
 $ saja --blank <yourProject>
 ```
