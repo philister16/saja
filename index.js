@@ -10,6 +10,7 @@
 // to run commands in terminal
 var exec = require("child_process").exec;
 var readline = require("readline");
+var fs = require("fs");
 
 // get the user options
 var userArgs = process.argv.splice(2);
@@ -20,21 +21,54 @@ var args = checkUserArgs(userArgs);
 // if checkUserArgs didn't return false
 if(args !== false) {
 
-  // get the configuration options from the user
-  var config = getConfig(args, function(config) {
-    if(config.have) {
-      console.log("Your config options are as follows:");
-      console.log(config);
-      console.log("You can change these manually at all times.");
-      return config;
-    }
-  });
-
-  // donwload the files and install everything
-  //downloadZip();
+  // donwload the files and install everything and finally create config
+  downloadZip();
 }
 
 // Utilities
+
+function writeConfig(args, config) {
+
+  if(config.have) {
+      console.log("Your config options are as follows:");
+      console.log(config);
+      console.log("You can change these manually at all times.");
+
+    var string = "//- Sassyjade's Jade Configuration File\n\n";
+    
+    string += "//- Project name\n";
+    string += "- var site = '" + config.name +"';\n\n";
+
+    string += "//- Project root\n";
+    string += "- var root = '" + config.root + "';\n\n";
+
+    string += "//- CSS file to be included in distribution\n";
+    string += "- var css = '" + config.css + "';\n\n";
+
+    string += "//- JS file to be included in distribution\n";
+    string += "- var js = '" + config.js + "';\n\n";
+
+    string += "//- Page title format\n";
+    string += "- var title = site + ' | ' + page;\n\n";
+
+    string += "//- Global includes\n";
+    string += "include ../mixin/jadestones.jade";
+
+    var file = args.name + "/src/templ/incl/config.jade";
+
+    fs.writeFile(file, string, function(err) {
+      if(err) {
+        console.log(err);
+      } else {
+        console.log("Created config file at src/templ/incl/config.jade");       
+      }
+    });
+
+  } // endif
+
+  console.log("Sassyjade is now ready to rock'n'roll :-)");
+
+} // writeConfig()
 
 /**
  * Prompts the user to input configuration options
@@ -101,7 +135,7 @@ function getConfig(args, cb) {
                     break;
                 }
                 config.have = true;
-                cb(config);
+                cb(args, config);
                 rl.close();
                 
               });
@@ -114,7 +148,7 @@ function getConfig(args, cb) {
       default:
         console.log("Ok boss, Saja won't configure your project. You can do this later on manually.");
         config.have = false;
-        cb(config);
+        cb(args, config);
         rl.close();
         break;
     }
@@ -311,6 +345,7 @@ function npmInstalls(args) {
       return false;
     } else {
       console.log("... and done!");
+      getConfig(args, writeConfig);
       return true;
     }
   });
