@@ -1,4 +1,4 @@
-#! /usr/bin/env node
+/* #! /usr/bin/env node */
 
 /**
  * Saja - CLI for Sassyjade Boilerplate
@@ -9,21 +9,118 @@
 
 // to run commands in terminal
 var exec = require("child_process").exec;
+var readline = require("readline");
 
 // get the user options
 var userArgs = process.argv.splice(2);
 
-// pass the return from the check on userArgs
+//pass the return from the check on userArgs
 var args = checkUserArgs(userArgs);
 
 // if checkUserArgs didn't return false
 if(args !== false) {
+
+  // get the configuration options from the user
+  var config = getConfig(args, function(config) {
+    if(config.have) {
+      console.log("Your config options are as follows:");
+      console.log(config);
+      console.log("You can change these manually at all times.");
+      return config;
+    }
+  });
+
   // donwload the files and install everything
-  downloadZip();
+  //downloadZip();
 }
 
-
 // Utilities
+
+/**
+ * Prompts the user to input configuration options
+ * @return obj user defined options
+ */
+function getConfig(args, cb) {
+
+  var config = {};
+
+  rl = readline.createInterface(process.stdin, process.stdout);
+
+  rl.question("Do you want Saja to help you configure your project? (Y/n) > ", function(answ) {
+    
+    // Configuration workflow
+    switch(answ.trim()) {
+      case "Y":
+      case "y":
+        
+        // Project naming
+        rl.question("Project name ("+args.name+"): ", function(answ) {
+          switch(answ.trim().length) {
+            case 0:
+              config.name = args.name;
+              break;
+
+            default:
+              config.name = answ.trim();
+              break
+          }
+
+          // Root path
+          rl.question("Dist root path ("+__dirname+"/"+args.name+"/dist/): ", function(answ) {
+            switch(answ.trim().length) {
+              case 0:
+                config.root = __dirname + "/" + args.name + "/dist/";
+                break;
+
+              default:
+                config.root = answ.trim();
+                break;
+            }
+
+            // CSS name
+            rl.question("CSS name (main.css): ", function(answ) {
+              switch(answ.trim().length) {
+                case 0:
+                  config.css = "main.css";
+                  break;
+
+                default:
+                  config.css = answ.trim();
+                  break;
+              }
+
+              // JS name
+              rl.question("JS name (main.js): ", function(answ) {
+                switch(answ.trim().length) {
+                  case 0:
+                    config.js = "main.js";
+                    break;
+
+                  default:
+                    config.js = answ.trim();
+                    break;
+                }
+                config.have = true;
+                cb(config);
+                rl.close();
+                
+              });
+            });
+          });
+        });
+        break;
+
+      // Workflow w/o configuration  
+      default:
+        console.log("Ok boss, Saja won't configure your project. You can do this later on manually.");
+        config.have = false;
+        cb(config);
+        rl.close();
+        break;
+    }
+  });
+
+} // getConfig()
 
 /**
  * checks if user args are valid
