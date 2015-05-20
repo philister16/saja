@@ -7,10 +7,30 @@
  * @author Philipp Nueesch <phil@rhinerock.com> (http://rhinerock.com)
  */
 
+/* ### Todo ###
+
+for whatever reason npmInstalls() doesnt call getConfig()
+it worked before, it doesn't anymore
+
+### */
+
+/*=========================================
+  Requires
+  =========================================*/
+
 // to run commands in terminal
 var exec = require("child_process").exec;
+
+// read user input from terminal
 var readline = require("readline");
+
+// file system
 var fs = require("fs");
+
+
+/*=========================================
+  Process
+  =========================================*/
 
 // get the user options
 var userArgs = process.argv.splice(2);
@@ -23,10 +43,20 @@ if(args !== false) {
 
   // donwload the files and install everything and finally create config
   downloadZip();
+  //getConfig(args, writeConfig);
 }
 
-// Utilities
 
+/*=========================================
+  Util
+  =========================================*/
+
+/**
+ * Writes the config.jade file to disk
+ * @param obj user provided arguments
+ * @param obj user provided config options
+ * @return func console.log
+ */
 function writeConfig(args, config) {
 
   if(config.have) {
@@ -72,6 +102,8 @@ function writeConfig(args, config) {
 
 /**
  * Prompts the user to input configuration options
+ * @param obj the user arguments
+ * @param func callback
  * @return obj user defined options
  */
 function getConfig(args, cb) {
@@ -84,8 +116,18 @@ function getConfig(args, cb) {
     
     // Configuration workflow
     switch(answ.trim()) {
-      case "Y":
-      case "y":
+
+      // Workflow w/o configuration  
+      case "n":
+      case "N":
+        console.log("Ok boss, Saja won't configure your project. You can do this later on manually.");
+        config.have = false;
+        cb(args, config);
+        rl.close();
+        break;
+
+      // Workflow w/ configuration
+      default:
         
         // Project naming
         rl.question("Project name ("+args.name+"): ", function(answ) {
@@ -100,7 +142,7 @@ function getConfig(args, cb) {
           }
 
           // Root path
-          rl.question("Dist root path ("+__dirname+"/"+args.name+"/dist/): ", function(answ) {
+          rl.question("Dist root path ("+process.cwd()+"/"+args.name+"/dist/): ", function(answ) {
             switch(answ.trim().length) {
               case 0:
                 config.root = __dirname + "/" + args.name + "/dist/";
@@ -143,15 +185,9 @@ function getConfig(args, cb) {
           });
         });
         break;
+  
+    } // switch
 
-      // Workflow w/o configuration  
-      default:
-        console.log("Ok boss, Saja won't configure your project. You can do this later on manually.");
-        config.have = false;
-        cb(args, config);
-        rl.close();
-        break;
-    }
   });
 
 } // getConfig()
@@ -336,18 +372,49 @@ function makeBlank(args) {
  * @param obj arguments provided by user
  * @ return bool true if no err
  */
-function npmInstalls(args) {
+function npmInstalls(args, writeConfig) {
   var target = args.name;
   var cmd = "cd " + target + " && npm install";
+  exec(cmd, function(err, stdout, stderr) {
+    if(err) {
+      rollback(args);
+      return false;
+    } else {
+      console.log("... and done!");
+      getConfig(args, writeConfig);
+      //return true;
+    }
+  });
+}
+
+/**
+ * Rollback npmInstalls in case of permission error
+ * @param obj arguments provided by user
+ * @return bool true if no err
+ */
+function rollback(args) {
+  var target = args.name;
+  var cmd = "rm -r " + target;
   exec(cmd, function(err, stdout, stderr) {
     if(err) {
       throw err;
       return false;
     } else {
-      console.log("... and done!");
-      getConfig(args, writeConfig);
+      console.log("You do not have permissions to install npm dependencies.");
+      console.log("Try to run this command as root admin.");
       return true;
     }
   });
 }
+
+
+
+
+
+
+
+
+
+
+
 
