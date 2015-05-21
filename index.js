@@ -380,8 +380,8 @@ function npmInstalls(args) {
       rollback(args);
       return false;
     } else {
-      //console.log("... and done!");
-      getConfig(args, writeConfig);
+      console.log("... and done!");
+      jadeConfigurator(args);
       //return true;
     }
   });
@@ -405,6 +405,10 @@ function rollback(args) {
       return true;
     }
   });
+}
+
+function jadeConfigurator(args) {
+  getConfig(args, writeConfig);
 }
 
 
