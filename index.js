@@ -145,7 +145,7 @@ function getConfig(args, cb) {
           rl.question("Dist root path ("+process.cwd()+"/"+args.name+"/dist/): ", function(answ) {
             switch(answ.trim().length) {
               case 0:
-                config.root = __dirname + "/" + args.name + "/dist/";
+                config.root = process.cwd() + "/" + args.name + "/dist/";
                 break;
 
               default:
@@ -372,7 +372,7 @@ function makeBlank(args) {
  * @param obj arguments provided by user
  * @ return bool true if no err
  */
-function npmInstalls(args, writeConfig) {
+function npmInstalls(args) {
   var target = args.name;
   var cmd = "cd " + target + " && npm install";
   exec(cmd, function(err, stdout, stderr) {
@@ -380,7 +380,7 @@ function npmInstalls(args, writeConfig) {
       rollback(args);
       return false;
     } else {
-      console.log("... and done!");
+      //console.log("... and done!");
       getConfig(args, writeConfig);
       //return true;
     }
@@ -400,7 +400,7 @@ function rollback(args) {
       throw err;
       return false;
     } else {
-      console.log("You do not have permissions to install npm dependencies.");
+      console.log("--ERR: There was a problem when trying to install dependencies with npm.--");
       console.log("Try to run this command as root admin.");
       return true;
     }
