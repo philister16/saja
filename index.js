@@ -1,4 +1,4 @@
-//#! /usr/bin/env node
+#! /usr/bin/env node
 
 /**
  * Saja - CLI for Sassyjade Boilerplate

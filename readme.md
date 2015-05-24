@@ -8,7 +8,7 @@ This command will fetch the latest version of [Sassyjade](http://rhinerock.com/s
 
 Since the command also installs all necessary dependencies via npm you might run into some permission errors. In this case try to execute the command as super user: `$ sudo saja <yourProject>`.
 ### Configure Jade
-After the installation is complete saja will allow you to configure `jade.config` via command line.
+After the installation is complete saja will allow you to configure `config.jade` via command line.
 ```bash
 $ Do you want Saja to help you configure your project? (Y/n) > Y
 ```
@@ -24,6 +24,6 @@ JavaScript name | The path and name of your javascript file | `js/main.js`
 ```bash
 $ saja --blank <yourProject>
 ```
-If you don't want the default folder and file structre of Sassyjade add the `--blank` flag. You can also just use `-b` instead.
+If you don't want the default folder and file structre of Sassyjade add the `--blank` flag. You can also just use `-b` instead. This will give you a `gulpfile.js`, together with the `package.json` and `sassyjade.config.json`. From there you can start to configure and build your project manually.
 ## License
 MIT &copy; [philister16](mailto:phil@rhinerock.com)
