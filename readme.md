@@ -1,7 +1,7 @@
 # Saja
 A super small CLI for Sassyjade
 ## Usage
-```
+```bash
 $ saja <yourProject>
 ```
 This command will fetch the latest version of [Sassyjade](http://rhinerock.com/sassyjade) boilerplate and install all its dependencies in a new folder called "yourProject", relative to the folder from where you ran the command.
@@ -18,8 +18,8 @@ Option | Description | Default
 :----- | :---------- | :------
 Project name | The title of your site | The project name you passed to saja
 Project root | Full root path of your application, such as a path in the file system or a full URI | Path to folder in which you ran `$ saja`
-CSS name | The path and name of your css file | `dist/css/main.css`
-JavaScript name | The path and name of your javascript file | `dist/js/app.js`
+CSS name | The path and name of your css file | `css/main.css`
+JavaScript name | The path and name of your javascript file | `js/main.js`
 ### Create a blank project
 ```bash
 $ saja --blank <yourProject>

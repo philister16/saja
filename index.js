@@ -1,4 +1,4 @@
-#! /usr/bin/env node
+//#! /usr/bin/env node
 
 /**
  * Saja - CLI for Sassyjade Boilerplate
@@ -65,10 +65,10 @@ function writeConfig(args, config) {
     string += "- var root = '" + config.root + "';\n\n";
 
     string += "//- CSS file to be included in distribution\n";
-    string += "- var css = '" + config.css + "';\n\n";
+    string += "- var css = root + '" + config.css + "';\n\n";
 
     string += "//- JS file to be included in distribution\n";
-    string += "- var js = '" + config.js + "';\n\n";
+    string += "- var js = root + '" + config.js + "';\n\n";
 
     string += "//- Page title format\n";
     string += "- var title = site + ' | ' + page;\n\n";
@@ -149,11 +149,11 @@ function getConfig(args, cb) {
             rl.question("CSS path (css/main.css): ", function(answ) {
               switch(answ.trim().length) {
                 case 0:
-                  config.css = config.root + "css/main.css";
+                  config.css = "css/main.css";
                   break;
 
                 default:
-                  config.css = config.root + answ.trim();
+                  config.css = answ.trim();
                   break;
               }
 
@@ -161,11 +161,11 @@ function getConfig(args, cb) {
               rl.question("JS name (js/main.js): ", function(answ) {
                 switch(answ.trim().length) {
                   case 0:
-                    config.js = config.root + "js/main.js";
+                    config.js = "js/main.js";
                     break;
 
                   default:
-                    config.js = config.root + answ.trim();
+                    config.js = answ.trim();
                     break;
                 }
                 config.have = true;
@@ -374,7 +374,7 @@ function npmInstalls(args) {
     } else {
       console.log("... and done!");
       jadeConfigurator(args);
-      //return true;
+      return true;
     }
   });
 }
