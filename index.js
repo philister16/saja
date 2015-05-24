@@ -1,4 +1,4 @@
-/* #! /usr/bin/env node */
+#! /usr/bin/env node
 
 /**
  * Saja - CLI for Sassyjade Boilerplate
@@ -6,13 +6,6 @@
  * @license MIT
  * @author Philipp Nueesch <phil@rhinerock.com> (http://rhinerock.com)
  */
-
-/* ### Todo ###
-
-for whatever reason npmInstalls() doesnt call getConfig()
-it worked before, it doesn't anymore
-
-### */
 
 /*=========================================
   Requires
@@ -43,7 +36,6 @@ if(args !== false) {
 
   // donwload the files and install everything and finally create config
   downloadZip();
-  //getConfig(args, writeConfig);
 }
 
 
@@ -154,26 +146,26 @@ function getConfig(args, cb) {
             }
 
             // CSS name
-            rl.question("CSS name (main.css): ", function(answ) {
+            rl.question("CSS path (css/main.css): ", function(answ) {
               switch(answ.trim().length) {
                 case 0:
-                  config.css = "main.css";
+                  config.css = config.root + "css/main.css";
                   break;
 
                 default:
-                  config.css = answ.trim();
+                  config.css = config.root + answ.trim();
                   break;
               }
 
               // JS name
-              rl.question("JS name (main.js): ", function(answ) {
+              rl.question("JS name (js/main.js): ", function(answ) {
                 switch(answ.trim().length) {
                   case 0:
-                    config.js = "main.js";
+                    config.js = config.root + "js/main.js";
                     break;
 
                   default:
-                    config.js = answ.trim();
+                    config.js = config.root + answ.trim();
                     break;
                 }
                 config.have = true;
@@ -410,15 +402,3 @@ function rollback(args) {
 function jadeConfigurator(args) {
   getConfig(args, writeConfig);
 }
-
-
-
-
-
-
-
-
-
-
-
-
