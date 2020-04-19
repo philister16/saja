@@ -1,4 +1,7 @@
-# Saja
+# Saja [DEPRICATED]
+
+**This project is no longer active.**
+
 A super small CLI for Sassyjade
 ## Usage
 ```bash
